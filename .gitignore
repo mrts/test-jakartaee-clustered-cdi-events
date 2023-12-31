@@ -4,6 +4,7 @@
 .project
 .classpath
 /src/main/webapp/frontend-es*/
+/src/main/webapp/VAADIN/themes/mytheme/styles.css
 
 *.iml
 .DS_Store

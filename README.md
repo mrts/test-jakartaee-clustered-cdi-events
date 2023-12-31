@@ -1,52 +1,36 @@
-vaadin-app
-==============
+# jakartaee-clustered-cdi-events testing application
 
-Template for a simple Vaadin application that only requires a Servlet 3.0 container to run.
+This application is created for testing the
+[`jakartaee-clustered-cdi-events`](https://github.com/mrts/jakartaee-clustered-cdi-events)
+EJB module functionality. It demonstrates with a Vaadin application how CDI
+events can be used within a Jakarta EE environment, showcasing transparent
+event broadcasting and consumption in a clustered setup.
 
+## Components
 
-Workflow
-========
+- `Broadcaster`: Manages event listeners and broadcasts messages to all registered consumers according to the Vaadin Broadcaster pattern.
+- `Message`: A simple message class marked with `@Clustered` to enable cluster-wide event distribution.
+- `MyUI`: A Vaadin UI component that allows users to send messages and view received broadcasts from local and other nodes.
 
-To compile the entire project, run "mvn install".
+## Building and running
 
-To run the application, run "mvn jetty:run" and open http://localhost:8080/ .
+You need Maven and Java 11 JDK to build and run the application.
 
-To produce a deployable production mode WAR:
-- change productionMode to true in the servlet class configuration (nested in the UI class)
-- run "mvn clean package"
-- test the war file with "mvn jetty:run-war"
+Build the application WAR with `mvn package` and deploy the resulting WAR to the
+application server.
 
-Client-Side compilation
--------------------------
+See configuration and running instructions in the
+`jakartaee-clustered-cdi-events` project
+[README](https://github.com/mrts/jakartaee-clustered-cdi-events#configuration).
 
-The generated maven project is using an automatically generated widgetset by default. 
-When you add a dependency that needs client-side compilation, the maven plugin will 
-automatically generate it for you. Your own client-side customizations can be added into
-package "client".
+## Usage
 
-Debugging client side code
-  - run "mvn vaadin:run-codeserver" on a separate console while the application is running
-  - activate Super Dev Mode in the debug window of the application
+1. Open <http://localhost:8080/vaadin-app-1.0-SNAPSHOT/> in a web browser.
+2. Type a message and click "Broadcast" to send a CDI event.
+3. The application displays messages received from the CDI event system.
 
-Developing a theme using the runtime compiler
--------------------------
+## License
 
-When developing the theme, Vaadin can be configured to compile the SASS based
-theme at runtime in the server. This way you can just modify the scss files in
-your IDE and reload the browser to see changes.
+This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details.
 
-To use the runtime compilation, open pom.xml and comment out the compile-theme 
-goal from vaadin-maven-plugin configuration. To remove a possibly existing 
-pre-compiled theme, run "mvn clean package" once.
-
-When using the runtime compiler, running the application in the "run" mode 
-(rather than in "debug" mode) can speed up consecutive theme compilations
-significantly.
-
-It is highly recommended to disable runtime compilation for production WAR files.
-
-Using Vaadin pre-releases
--------------------------
-
-If Vaadin pre-releases are not enabled by default, use the Maven parameter
-"-P vaadin-prerelease" or change the activation default value of the profile in pom.xml .
+- Copyright 2024 Mart Sõmermaa.
