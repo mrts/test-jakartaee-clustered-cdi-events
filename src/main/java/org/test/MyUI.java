@@ -10,6 +10,9 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import javax.inject.Inject;
+import java.util.function.Consumer;
+
 /**
  * This UI is the application entry point. A UI may either represent a browser window
  * (or tab) or some part of an HTML page where a Vaadin application is embedded.
@@ -19,21 +22,39 @@ import com.vaadin.ui.VerticalLayout;
  */
 @CDIUI("")
 @Push(transport = Transport.WEBSOCKET_XHR)
-public class MyUI extends UI {
+public class MyUI extends UI implements Consumer<String> {
+
+    @Inject
+    private Broadcaster broadcaster;
+    @Inject
+    private javax.enterprise.event.Event<Message> messageEvent;
+
+    private final VerticalLayout layout = new VerticalLayout();
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final VerticalLayout layout = new VerticalLayout();
-
         final TextField name = new TextField();
         name.setCaption("Type your message:");
 
         Button button = new Button("Broadcast");
-        button.addClickListener(e -> layout.addComponent(new Label("Got message: " + name.getValue())));
+        button.addClickListener(e -> messageEvent.fire(new Message(name.getValue())));
 
         layout.addComponents(name, button);
 
         setContent(layout);
+
+        broadcaster.register(this);
+    }
+
+    @Override
+    public void detach() {
+        broadcaster.unregister(this);
+        super.detach();
+    }
+
+    @Override
+    public void accept(String message) {
+        getUI().access(() -> layout.addComponent(new Label("Got message: " + message)));
     }
 
 }
