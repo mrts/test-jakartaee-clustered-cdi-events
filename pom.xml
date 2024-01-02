@@ -71,6 +71,13 @@
             <version>2.0.10</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <!-- You have to build and install this locally as it is not published in Maven Central -->
+            <groupId>org.clusteredcdievents</groupId>
+            <artifactId>jakartaee-clustered-cdi-events</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+            <type>ejb</type>
+        </dependency>
     </dependencies>
 
     <build>
