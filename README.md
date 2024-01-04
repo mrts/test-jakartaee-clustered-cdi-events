@@ -11,6 +11,11 @@ transparent broadcasted within a WildFly (or any other Jakarta EE 8) cluster.
 - `Message`: A simple message class marked with `@Clustered` to enable cluster-wide event distribution.
 - `MyUI`: A Vaadin UI component that allows users to send messages and view received broadcasts from local and other nodes.
 
+Here's the component diagram:
+
+![Component diagram](doc/component-diagram.png)
+
+
 ## Building and running
 
 You need Maven and Java 11 JDK to build and run the application.
