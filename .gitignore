@@ -4,7 +4,6 @@
 .project
 .classpath
 /src/main/webapp/frontend-es*/
-/src/main/webapp/VAADIN/themes/mytheme/styles.css
 
 *.iml
 .DS_Store
@@ -24,3 +23,11 @@ frontend/generated/
 webpack.generated.js
 
 *.swp
+# These should be included in Git in normal Vaadin applications, but not needed here.
+frontend/
+package.json
+package-lock.json
+tsconfig.json
+vite.config.ts
+vite.generated.ts
+

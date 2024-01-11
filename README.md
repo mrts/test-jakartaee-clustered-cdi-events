@@ -9,7 +9,7 @@ transparent broadcasted within a WildFly (or any other Jakarta EE 8) cluster.
 
 - `Broadcaster`: Manages event listeners and broadcasts messages to all registered consumers according to the Vaadin Broadcaster pattern.
 - `Message`: A simple message class marked with `@Clustered` to enable cluster-wide event distribution.
-- `MyUI`: A Vaadin UI component that allows users to send messages and view received broadcasts from local and other nodes.
+- `MainView`: A Vaadin view that allows users to send messages and view received broadcasts from local and other nodes.
 
 Here's the component diagram:
 
@@ -20,10 +20,20 @@ Here's the component diagram:
 
 You need Maven and Java 11 JDK to build and run the application.
 
-Build the application WAR with `mvn package` and deploy the resulting WAR to the
-application server.
+First, build and install `jakartaee-clustered-cdi-events` locally as it is not
+published in Maven Central yet:
 
-See configuration and running instructions in the
+    cd jakartaee-clustered-cdi-events
+    mvn clean install
+
+Then build the test application WAR with
+
+    mvn vaadin:prepare-frontend
+    mvn package
+
+and deploy the resulting WAR to the application server.
+
+See other configuration and running instructions in the
 `jakartaee-clustered-cdi-events` project
 [README](https://github.com/mrts/jakartaee-clustered-cdi-events#configuration).
 
@@ -33,7 +43,7 @@ Dockerfile and docker-compose.yml
 
 ## Usage
 
-1. Open <http://localhost:8080/vaadin-app-1.0-SNAPSHOT/> in a web browser.
+1. Open <http://localhost:8080/> in a web browser.
 2. Type a message and click "Broadcast" to send a CDI event.
 3. The application displays messages received from the CDI event system.
 
