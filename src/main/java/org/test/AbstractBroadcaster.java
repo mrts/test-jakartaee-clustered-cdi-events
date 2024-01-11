@@ -22,11 +22,12 @@ abstract class AbstractBroadcaster<M> {
 
     public Registration register(Consumer<M> listener) {
         log.debug("{} registering {}", this, listener);
-        listeners.add(listener);
-        return () -> {
-            log.debug("{} unregistering {}", this, listener);
-            listeners.remove(listener);
-        };
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+            return () -> unregister(listener);
+        } else {
+            throw new IllegalArgumentException("Listener " + listener + " is already registered");
+        }
     }
 
     public void broadcast(M message) {
@@ -36,7 +37,20 @@ abstract class AbstractBroadcaster<M> {
     private void onMessage(@Observes M message) {
         log.debug("{} got message {}", this, message);
         for (final Consumer<M> listener : listeners) {
-            executorService.execute(() -> listener.accept(message));
+            try {
+                executorService.execute(() -> listener.accept(message));
+            } catch (Exception e) {
+                log.error("Error processing message in listener: {}", listener, e);
+            }
+        }
+    }
+
+    private void unregister(Consumer<M> listener) {
+        log.debug("{} unregistering {}", this, listener);
+        if (listeners.contains(listener)) {
+            listeners.remove(listener);
+        } else {
+            log.warn("Listener {} is not registered, cannot unregister", listener);
         }
     }
 }
