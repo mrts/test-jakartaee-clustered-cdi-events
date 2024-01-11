@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2024 Mart Somermaa
+ SPDX-License-Identifier: Apache-2.0
+-->
+
 <jboss-web>
     <context-root>/</context-root>
 </jboss-web>

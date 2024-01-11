@@ -85,4 +85,9 @@ jboss-cli.sh --connect --command='/subsystem=messaging-activemq/jms-bridge=wildf
 
 This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details.
 
-- Copyright 2024 Mart Sõmermaa.
+Here's how to apply the license with `addlicense`:
+
+```sh
+go install github.com/google/addlicense@latest
+~/go/bin/addlicense -c 'Your Name' -s=only -l=apache src/
+```
