@@ -34,13 +34,16 @@ public class MainView extends VerticalLayout implements Consumer<Message> {
         final TextField textField = new TextField("Type your message:");
         textField.addThemeName("bordered");
 
-        final Button button = new Button("Broadcast",
+        final Button broadcastButton = new Button("Broadcast",
             e -> broadcaster.broadcast(new Message(textField.getValue())));
 
-        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        button.addClickShortcut(Key.ENTER);
+        final Button asyncBroadcastButton = new Button("Async broadcast",
+            e -> broadcaster.broadcastAsync(new Message(textField.getValue())));
 
-        add(textField, button);
+        broadcastButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        broadcastButton.addClickShortcut(Key.ENTER);
+
+        add(textField, broadcastButton, asyncBroadcastButton);
 
         broadcasterRegistration = broadcaster.register(this);
     }

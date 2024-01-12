@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
 import javax.enterprise.event.ObservesAsync;
+import javax.enterprise.event.TransactionPhase;
 import javax.inject.Inject;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
@@ -36,10 +38,18 @@ abstract class AbstractBroadcaster<M> {
     }
 
     public void broadcast(M message) {
+        messageEvent.fire(message);
+    }
+
+    public void broadcastAsync(M message) {
         messageEvent.fireAsync(message);
     }
 
-    private void onMessage(@ObservesAsync M message) {
+    private void onMessageAsync(@ObservesAsync M message) {
+        onMessage(message);
+    }
+
+    private void onMessage(@Observes(during = TransactionPhase.AFTER_SUCCESS) M message) {
         log.debug("{} got message {}", this, message);
         for (final Consumer<M> listener : listeners) {
             try {
