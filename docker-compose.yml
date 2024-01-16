@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - OTHER_NODE_HOSTNAME=wildfly-node2
     ports:
       - "8080:8080"
       - "9990:9990"
@@ -15,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - OTHER_NODE_HOSTNAME=wildfly-node1
     ports:
       - "8081:8080"
       - "9991:9990"

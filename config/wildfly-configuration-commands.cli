@@ -1,0 +1,40 @@
+embed-server --std-out=echo --server-config=standalone-full.xml
+
+# Add the CLUSTER_CDI_EVENTS JMS topic used by jakartaee-clustered-cdi-events.
+# The topic must be bound to the java:jboss/exported namespace for a remote client to be able to look it up.
+jms-topic add --topic-address=CLUSTER_CDI_EVENTS --entries=[\
+    jms/topic/CLUSTER_CDI_EVENTS, \
+    java:jboss/exported/jms/topic/CLUSTER_CDI_EVENTS \
+]
+
+# Configure the JMS bridge.
+/subsystem=messaging-activemq/jms-bridge=my-jms-bridge:add( \
+    quality-of-service=AT_MOST_ONCE, \
+    module=org.apache.activemq.artemis, \
+    failure-retry-interval=500, \
+    max-retries=1, \
+    max-batch-size=10, \
+    max-batch-time=100, \
+    target-connection-factory=ConnectionFactory, \
+    target-destination=jms/topic/CLUSTER_CDI_EVENTS, \
+    source-connection-factory=jms/RemoteConnectionFactory, \
+    source-destination=java:/jms/topic/CLUSTER_CDI_EVENTS, \
+    source-user=jmsuser, \
+    source-password=jmspass, \
+    source-context={ \
+        java.naming.factory.initial=org.wildfly.naming.client.WildFlyInitialContextFactory, \
+        java.naming.provider.url=http-remoting://OTHER_NODE_HOSTNAME:${jboss.http.port:8080}, \
+        java.naming.security.principal=jmsuser, \
+        java.naming.security.credentials=jmspass \
+    } \
+)
+
+# TODO:
+# Adjust logging levels and set filters for org.apache.activemq.artemis.jms.bridge
+# /subsystem=logging/logger=org.apache.activemq.artemis.jms.bridge:add(level=WARN)
+# /subsystem=logging/logger=org.apache.activemq.artemis.jms.bridge:write-attribute(name=filter-spec, value="not(match('AMQ342009.*'))")
+
+# Adjust logging levels and set filters for org.apache.activemq.artemis.core.server
+# /subsystem=logging/logger=org.apache.activemq.artemis.core.server:add(level=WARN)
+# /subsystem=logging/logger=org.apache.activemq.artemis.core.server:write-attribute(name=filter-spec, value="not(match('AMQ222059.*'))")
+
