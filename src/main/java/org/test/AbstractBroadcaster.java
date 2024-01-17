@@ -5,7 +5,7 @@
 
 package org.test;
 
-import com.vaadin.flow.shared.Registration;
+import com.vaadin.shared.Registration;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
