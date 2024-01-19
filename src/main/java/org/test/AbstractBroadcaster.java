@@ -28,7 +28,7 @@ abstract class AbstractBroadcaster<M> {
     private Event<M> messageEvent;
 
     public Registration register(Consumer<M> listener) {
-        log.debug("{} registering {}", this, listener);
+        log.info("{} registering {}", this, listener);
         if (!listeners.contains(listener)) {
             listeners.add(listener);
             return () -> unregister(listener);
@@ -50,18 +50,20 @@ abstract class AbstractBroadcaster<M> {
     }
 
     private void onMessage(@Observes(during = TransactionPhase.AFTER_SUCCESS) M message) {
-        log.debug("{} got message {}", this, message);
+        log.info("{} got message {}, listeners are: {}", this, message, listeners);
         for (final Consumer<M> listener : listeners) {
-            try {
-                executorService.execute(() -> listener.accept(message));
-            } catch (Exception e) {
-                log.error("Error processing message in listener: {}", listener, e);
-            }
+            executorService.execute(() -> {
+                try {
+                    listener.accept(message);
+                } catch (Exception e) {
+                    log.error("Error processing message in listener: {}", listener, e);
+                }
+            });
         }
     }
 
     private void unregister(Consumer<M> listener) {
-        log.debug("{} unregistering {}", this, listener);
+        log.info("{} unregistering {}", this, listener);
         if (listeners.contains(listener)) {
             listeners.remove(listener);
         } else {

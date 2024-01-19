@@ -6,8 +6,10 @@
 package org.test;
 
 import com.vaadin.cdi.annotation.CdiComponent;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.notification.Notification;
@@ -19,11 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.function.Consumer;
+import java.util.Objects;
 
 @Route("")
 @CdiComponent
-public class MainView extends VerticalLayout implements Consumer<Message> {
+@Slf4j
+public class MainView extends VerticalLayout {
 
     @Inject
     private Broadcaster broadcaster;
@@ -44,21 +47,25 @@ public class MainView extends VerticalLayout implements Consumer<Message> {
         broadcastButton.addClickShortcut(Key.ENTER);
 
         add(textField, broadcastButton, asyncBroadcastButton);
+    }
 
-        broadcasterRegistration = broadcaster.register(this);
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        final UI ui = attachEvent.getUI();
+        Objects.requireNonNull(ui, "UI cannot be null");
+        broadcasterRegistration = broadcaster.register(message -> {
+                log.info("{} received message: {}", this, message.getText());
+                ui.access(() -> Notification.show(message.getText()));
+            }
+        );
     }
 
     @Override
     protected void onDetach(DetachEvent detachEvent) {
-        super.onDetach(detachEvent);
         if (broadcasterRegistration != null) {
             broadcasterRegistration.remove();
             broadcasterRegistration = null;
         }
     }
 
-    @Override
-    public void accept(Message message) {
-        getUI().ifPresent(ui -> ui.access(() -> Notification.show(message.getText())));
-    }
 }
