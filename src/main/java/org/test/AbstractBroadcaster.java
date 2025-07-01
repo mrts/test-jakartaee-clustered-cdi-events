@@ -35,6 +35,7 @@ abstract class AbstractBroadcaster<M> {
     }
 
     public void broadcast(M message) {
+        log.info("{} firing CDI message {}", this, message);
         messageEvent.fire(message);
     }
 

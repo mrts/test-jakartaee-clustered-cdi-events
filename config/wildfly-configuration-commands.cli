@@ -1,5 +1,10 @@
 embed-server --std-out=echo --server-config=standalone-full.xml
 
+# See also configure-wildfly.sh that replaces the OTHER_NODE_HOSTNAME placeholder below automatically.
+
+# Configure unique session cookie name for each node to avoid session cookie collisions when both nodes run on localhost.
+/subsystem=undertow/servlet-container=default/setting=session-cookie:add(name=JSESSIONID_OTHER_NODE_HOSTNAME)
+
 # Add the CLUSTER_CDI_EVENTS JMS topic used by jakartaee-clustered-cdi-events.
 # The topic must be bound to the java:jboss/exported namespace for a remote client to be able to look it up.
 jms-topic add --topic-address=CLUSTER_CDI_EVENTS --entries=[\
