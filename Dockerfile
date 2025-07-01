@@ -1,4 +1,4 @@
-FROM quay.io/wildfly/wildfly:26.1.3.Final-jdk11
+FROM quay.io/wildfly/wildfly:36.0.1.Final-jdk17
 
 ARG OTHER_NODE_HOSTNAME
 

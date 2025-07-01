@@ -22,7 +22,11 @@ frontend/generated/
 
 webpack.generated.js
 
+
+src/main/bundles/
+
 *.swp
+
 # These should be included in Git in normal Vaadin applications, but not needed here.
 frontend/
 package.json
@@ -30,4 +34,3 @@ package-lock.json
 tsconfig.json
 vite.config.ts
 vite.generated.ts
-

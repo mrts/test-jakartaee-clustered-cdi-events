@@ -3,7 +3,7 @@
 This application is created for testing the
 [`jakartaee-clustered-cdi-events`](https://github.com/mrts/jakartaee-clustered-cdi-events)
 EJB module. It demonstrates with a Vaadin application how CDI events can be
-transparently broadcasted within a WildFly (or any other Jakarta EE 8) cluster.
+transparently broadcasted within a WildFly (or any other Jakarta EE 10) cluster.
 
 ## Components
 
@@ -17,7 +17,7 @@ Here's the component diagram:
 
 ## Building and running locally
 
-You need Maven and Java 11 JDK to build and run the application.
+You need Maven and Java 17 JDK to build and run the application.
 
 First, build and install `jakartaee-clustered-cdi-events` locally as it is not
 published in Maven Central yet:
@@ -53,17 +53,12 @@ The application can be run in a clustered configuration using the provided
 [Docker](Dockerfile) and [Docker Compose](docker-compose.yml) configuration
 files by running the following commands after building the application WAR:
 
-    docker-compose build
-    docker-compose up -d
-
-In case `docker-compose build` fails due to BuildKit errors, try building
-without BuildKit:
-
-    DOCKER_BUILDKIT=0 docker-compose build
+    docker compose build
+    docker compose up -d
 
 You can view the logs with:
 
-    docker-compose logs -f
+    docker compose logs -f
 
 Open <http://localhost:8080/> and <http://localhost:8081/> side-by-side in
 separate web browser windows and send broadcast messages as described above to test

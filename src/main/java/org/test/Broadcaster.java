@@ -5,10 +5,10 @@
 
 package org.test;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.ObservesAsync;
-import javax.enterprise.event.TransactionPhase;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.event.ObservesAsync;
+import jakarta.enterprise.event.TransactionPhase;
 
 @ApplicationScoped
 public class Broadcaster extends AbstractBroadcaster<Message> {

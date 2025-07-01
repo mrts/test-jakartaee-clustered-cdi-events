@@ -17,10 +17,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.Registration;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.util.Objects;
 
 @Route("")
